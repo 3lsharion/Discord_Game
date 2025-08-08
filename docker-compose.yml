@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  bot:
+    build: .
+    container_name: idle-game-bot
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - MONGODB_URI=mongodb://mongodb:27017/idleGame
+    volumes:
+      - .:/app
+    command: ["node", "index.js"]
+
+  mongodb:
+    image: mongo:6
+    container_name: idle-game-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
